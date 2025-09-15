@@ -2,12 +2,13 @@
 
 This will redirect discord interaction to URL.
 
-# install
+## install
+
+### prerequisites
 
 In a new node (`npm init` to make one) project:
+
 ```bash
-# discord js module install 
-# npm install discord.js
 # pm2 global install (premanent running)
 npm install -g pm2
 # https modules install (for requests)
@@ -18,24 +19,40 @@ npm install discord-interactions node-fetch
 npm install -D tsx @types/node
 ```
 
-# start
+### variables
 
-## with node
-start with tsx for contextuam launch:
+in `.env` you should have:
+
+```.env
+DISCORD_PUBLIC_KEY=thediscordpublickey123IsRealyLongAndAlphaNum
+INTERNAL_PORT=3000
+PM2_NAME=static
+```
+
+## start
+
+### with node
+
+start with tsx for contextual launch:
+
 ```bash
 tsx index.ts
 ```
+
 this is not a production solution!
 
-## with pm2 console
-start with pm2 for permanent production:
+### with pm2 console
+
+start with pm2 for persistence:
+
 ```bash
 pm2 start index.ts --interpreter tsx --name shinimisc
 ```
-you may use `--watch` to update on file update, if you know what you are doing. But pay attention to exclude log folder.
 
-## with pm2 ecosystem
+### with pm2 ecosystem
+
 in a parent `ecosystem.config.js` file:
+
 ```json
 module.exports = {
   apps: [
@@ -53,3 +70,24 @@ module.exports = {
   ],
 };
 ```
+
+## update
+
+you can deploy using github workflow.
+
+### pipeline
+
+- github workflow trigger when pushing to `main` or `dev`
+- taking variables from the corresponding environement
+- `deploy.sh` is executed in the DNS
+
+### setup
+
+you have to setup the corresponding environements in repo/settings/environements
+
+you need to set:
+
+- variables -> `DEPLOY_DIR`
+- secrets -> `SERVER_IP` and `SSH_PRIVATE_KEY`
+
+here, `developpement.yml` and `production.yml` are workflows.

@@ -38,8 +38,9 @@ app.post("/", async (request, reply) => {
 
   // Verify request signature
   const isValid = await verifyKey(rawBody, signature, timestamp, DISCORD_PUBLIC_KEY);
-  app.log.info({ isValid }, "Incoming Discord request validation");
+  console.log(`Incoming request: validation... ${isValid}`);
   if (!isValid) {
+    console.warn(`Incoming request: wrong`);
     return reply.status(401).send({ error: "Invalid request signature" });
   }
 
@@ -48,12 +49,14 @@ app.post("/", async (request, reply) => {
 
   // Respond to ping
   if (body.type === 1) {
+    console.log(`Incoming request: pong!`);
     return reply.send({ type: 1 });
   }
 
   // * and now its fine !
   
   // Forward to Gadget backend
+  console.log(`Incoming request: forward`);
   const gadgetRes = await fetch(FORWARD_URL, {
     method: 'POST',
     headers: {
